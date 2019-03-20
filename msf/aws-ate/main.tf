@@ -5,8 +5,8 @@
 # - IAM role and user
 # - other services
 #
-# tag = { 
-#   Name = "${var.environment}-${var.project}-service_name" 
-# }
-
-
+# tags = "${merge(
+#   var.common-tags, 
+#   map(
+#     "Name", "${var.environment}-${var.project}-service_name" 
+# ))}"
