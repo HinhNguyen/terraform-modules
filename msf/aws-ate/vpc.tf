@@ -34,7 +34,18 @@ resource "aws_subnet" "ate-private-1a" {
   ))}"   
 }
 
-# Create public route and private route table
+# Create igw for pubic subnets
+resource "aws_internet_gateway" "ate-igw" {
+  vpc_id = "${aws_vpc.ate-vpc.id}"
+
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-igw"
+  ))}" 
+}
+
+# Create public route table 
 resource "aws_route_table" "ate-rtb-public" {
   vpc_id = "${aws_vpc.ate-vpc.id}"
 
@@ -45,7 +56,19 @@ resource "aws_route_table" "ate-rtb-public" {
   ))}"  
 }
 
+# Create internet route in public route table and assign in public subnet 
+resource "aws_route" "ate-route-public" {
+  route_table_id = "${aws_route_table.ate-rtb-public.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = "${aws_internet_gateway.ate-igw.id}"
+}
 
+resource "aws_route_table_association" "ate-route-public-assn" {
+  route_table_id = "${aws_route_table.ate-rtb-public.id}"
+  subnet_id = "${aws_subnet.ate-public-1a.id}"
+}
+
+#and private route table
 resource "aws_default_route_table" "ate-rtb-private" {
   default_route_table_id = "${aws_vpc.ate-vpc.main_route_table_id}"
 
@@ -57,24 +80,4 @@ resource "aws_default_route_table" "ate-rtb-private" {
 }
 
 
-
-# Create igw for pubic subnet
-resource "aws_internet_gateway" "ate-igw" {
-  vpc_id = "${aws_vpc.ate-vpc.id}"
-  tags = {
-    Name = "${var.environment}-${var.project}-igw"
-  }
-}
-
-# Create internet route in main route table and assign in public subnet 
-resource "aws_route" "ate-public-route" {
-  route_table_id = "${aws_vpc.ate-vpc.main_route_table_id}"
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id = "${aws_internet_gateway.ate-igw.id}"
-}
-
-resource "aws_route_table_association" "ate-public-route-assn" {
-  route_table_id = "${aws_vpc.ate-vpc.main_route_table_id}"
-  subnet_id = "${aws_subnet.ate-public-1a.id}"
-}
 
