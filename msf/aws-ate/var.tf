@@ -7,12 +7,18 @@ variable "project" {
   description = "Define defaut value for project"
 }
 
+variable "app-count" {
+  description = "Number of app server"
+}
+
+variable "app-keypair" {
+  description = "Keypair of app server"
+}
+
+variable "bastion-keypair" {
+  description = "Keypair of bastion host"
+}
+
 variable "common-tags" {
   description = "Define common tags for project"
-  default = {
-    brand = "internal"
-    project = "ate"
-    owner = "nghinh@fossil.com"
-    terraform_managed = "yes"
-  }
 }

@@ -68,7 +68,7 @@ resource "aws_route_table_association" "ate-route-public-assn" {
   subnet_id = "${aws_subnet.ate-public-1a.id}"
 }
 
-#and private route table
+# Assign main route table as a private route table. Subnet without route table will use this as default 
 resource "aws_default_route_table" "ate-rtb-private" {
   default_route_table_id = "${aws_vpc.ate-vpc.main_route_table_id}"
 
