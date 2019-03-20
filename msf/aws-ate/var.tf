@@ -21,4 +21,5 @@ variable "bastion-keypair" {
 
 variable "common-tags" {
   description = "Define common tags for project"
+  type = "map"
 }
