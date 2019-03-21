@@ -39,7 +39,11 @@ resource "aws_security_group" "ate-sg-ssh-ext" {
     description = ""
   }
 
-  tags = "${var.common-tags}"
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-sg-ssh-ext"
+  ))}" 
 }
 
 resource "aws_security_group" "ate-sg-ssh-int" {
@@ -51,7 +55,7 @@ resource "aws_security_group" "ate-sg-ssh-int" {
     from_port   = "22"
     to_port     = "22"
     protocol    = "tcp"
-    cidr_blocks = ["${aws_security_group.ate-sg-ssh-ext.id}"]
+    security_groups = ["${aws_security_group.ate-sg-ssh-ext.id}"]
     description = "SSH from bastion host"
   }
 
@@ -63,7 +67,11 @@ resource "aws_security_group" "ate-sg-ssh-int" {
     description = ""
   }
 
-  tags = "${var.common-tags}"
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-sg-ssh-int"
+  ))}" 
 }
 
 resource "aws_security_group" "ate-sg-app" {
@@ -87,7 +95,11 @@ resource "aws_security_group" "ate-sg-app" {
     description = ""
   }
 
-  tags = "${var.common-tags}"
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-sg-app"
+  ))}" 
 }
 
 resource "aws_security_group" "ate-sg-db" {
@@ -111,7 +123,11 @@ resource "aws_security_group" "ate-sg-db" {
     description = ""
   }
 
-  tags = "${var.common-tags}"
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-sg-db"
+  ))}" 
 }
 
 resource "aws_security_group" "ate-sg-icmp" {
@@ -159,5 +175,9 @@ resource "aws_security_group" "ate-sg-office" {
     description = ""
   }
 
-  tags = "${var.common-tags}"
+  tags = "${merge(
+    var.common-tags,
+    map(
+      "Name", "${var.environment}-${var.project}-sg-office"
+  ))}" 
 }
