@@ -111,7 +111,7 @@ resource "aws_security_group" "ate-sg-db" {
     from_port   = "27017"
     to_port     = "27017"
     protocol    = "tcp"
-    cidr_blocks = ["${aws_security_group.ate-sg-ssh-int.id}"]
+    security_groups = ["${aws_security_group.ate-sg-ssh-int.id}"]
     description = "MongodDB connection"
   }
 
@@ -139,7 +139,7 @@ resource "aws_security_group" "ate-sg-icmp" {
     from_port   = "0"
     to_port     = "0"
     protocol    = "icmp"
-    cidr_blocks = ["${aws_security_group.ate-sg-ssh-int.id}"]
+    security_groups = ["${aws_security_group.ate-sg-ssh-int.id}"]
     description = "ICMP ping from internal"
   }
 
